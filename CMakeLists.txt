@@ -1,0 +1,29 @@
+cmake_minimum_required (VERSION 3.8)
+project(demo)
+set(CMAKE_C_STANDARD 11)
+
+set(ROOT_DIR ${CMAKE_SOURCE_DIR})
+# ${CMAKE_BINARY_DIR} //指build目录
+
+# Meta information about the project
+set(META_PROJECT_NAME        ${This})
+set(META_PROJECT_DESCRIPTION "CMake project of my base library")
+set(META_AUTHOR_ORGANIZATION "SinHung")
+set(META_AUTHOR_MAINTAINER   "943771667@qq.com")
+set(META_VERSION_MAJOR       "1")
+set(META_VERSION_MINOR       "0")
+set(META_VERSION_PATCH       "0")
+set(META_VERSION             "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
+set(META_NAME_VERSION        "${META_PROJECT_NAME} v${META_VERSION}")
+
+# Create version file
+file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
+
+# 分别设置Debug和Release输出目录
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/Lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/Bin/Debug)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/Lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/Bin/Release)
+
+add_subdirectory(src)
+add_subdirectory(test)
