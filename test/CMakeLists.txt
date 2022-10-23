@@ -9,7 +9,8 @@ message("")
 message(STATUS "Start building : " ${Target})
 
 # 设置包含路径
-include_directories(${ROOT_DIR}/src/utils/include)
+include_directories(${ROOT_DIR}/src/utils/include
+        ${ROOT_DIR}/src/base/include)
 
 # find_package(${This} REQUIRED HINTS "${ROOT_DIR}/cmake")
 # include_directories(${${This}_INCLUDE_DIRS})
@@ -26,8 +27,10 @@ link_directories(
 aux_source_directory(. SRCS)
 
 add_executable(${Target} ${SRCS})
+set(STATIC_LIBRARYS ${ROOT_DIR}/build/Bin/Debug/libutil.a 
+                ${ROOT_DIR}/build/Bin/Debug/libbase.a)
 
-target_link_libraries(${Target} ${ROOT_DIR}/build/Bin/Debug/libutil.a -lpthread )
+target_link_libraries(${Target} ${STATIC_LIBRARYS} -lpthread )
 
 install(TARGETS ${Target}
         EXPORT ${Target}
