@@ -9,28 +9,34 @@ message("")
 message(STATUS "Start building : " ${Target})
 
 # 设置包含路径
-include_directories(${ROOT_DIR}/src/utils/include
-        ${ROOT_DIR}/src/base/include)
-
-# find_package(${This} REQUIRED HINTS "${ROOT_DIR}/cmake")
-# include_directories(${${This}_INCLUDE_DIRS})
-# link_libraries 此方式链接静态库，注意与target_link_libraries方式的区别
+include_directories( ${ROOT_DIR}/src/base/include ${ROOT_DIR}/src/net/include ${ROOT_DIR}/src/designpattern/include
+        ${ROOT_DIR}/src/yaml/  ${ROOT_DIR}/src/extend )
 
 # 设置依赖动态库、静态库路径
 link_directories(
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
         ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
+        ${ROOT_DIR}/src/yaml/yaml-cpp
         )
 
 # link_directories(${This}_LINK_DIRS)
 
 aux_source_directory(. SRCS)
+aux_source_directory(${ROOT_DIR}/src/utils UTIL_SRCS)
+aux_source_directory(${ROOT_DIR}/src/net NET_SRCS)
+aux_source_directory(${ROOT_DIR}/src/base BASE_SRCS)
+aux_source_directory(${ROOT_DIR}/src/extend EXTEND)
 
-add_executable(${Target} ${SRCS})
-set(STATIC_LIBRARYS ${ROOT_DIR}/build/Bin/Debug/libutil.a 
-                ${ROOT_DIR}/build/Bin/Debug/libbase.a)
 
-target_link_libraries(${Target} ${STATIC_LIBRARYS} -lpthread )
+
+# link_libraries(${ROOT_DIR}/src/yaml/yaml-cpp/libyaml-cpp.a)
+
+add_executable(${Target} ${SRCS} ${UTIL_SRCS} ${NET_SRCS} ${BASE_SRCS} ${EXTEND})
+
+set(STATIC_LIBRARYS)
+
+find_library(jsoncp libyaml-cpp.a  ${ROOT_DIR}/src/yaml)
+target_link_libraries(${Target}  ${jsoncp} ${STATIC_LIBRARYS}  -lpthread  )
 
 install(TARGETS ${Target}
         EXPORT ${Target}
